@@ -5,19 +5,36 @@ version:             0.1.0.0
 homepage:            https://github.com/steell/haskell-openzwave
 license:             LGPL-3
 license-file:        LICENSE
-author:              Stephen Elliott
+author:              Stephen Elliott <steve@steellworks.com>
 maintainer:          Stephen Elliott <steve@steellworks.com>
 copyright:           2017 Stephen Elliott
 category:            Network, IoT
-build-type:          Simple
+build-type:          Custom
 extra-source-files:  README.md
 cabal-version:       >=1.10
 
+
+custom-setup
+  setup-depends:   base
+                 , Cabal
+                 , haskell-openzwave-cpp
+                 , haskell-openzwave-gen
+                 , hoppy-runtime
+
 library
   hs-source-dirs:      src
-  exposed-modules:     Lib
+  exposed-modules:     OpenZWave.Ozw
+                     , OpenZWave.Std
+  other-extensions:
+      FlexibleInstances
+    , MultiParamTypeClasses
+    , OverlappingInstances
+    , TypeSynonymInstances
+    , UndecidableInstances
   build-depends:       base >= 4.7 && < 5
-                     , fficxx
+                     , haskell-openzwave-cpp
+                     , haskell-openzwave-gen
+                     , hoppy-runtime
   default-language:    Haskell2010
 
 source-repository head

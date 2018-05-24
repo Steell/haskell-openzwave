@@ -1,0 +1,38 @@
+name: haskell-openzwave-cpp
+version: 0.1.0
+license: LGPL-3
+license-file:        LICENSE
+author: Stephen Elliott <steve@steellworks.com>
+maintainer: Stephen Elliott <steve@steellworks.com>
+copyright: Copyright 2017 Stephen Elliott
+build-type: Custom
+cabal-version: >=1.10
+
+extra-source-files:
+  Makefile
+
+custom-setup
+  setup-depends:   base
+                 , Cabal
+                 , haskell-openzwave-gen
+                 , hoppy-runtime
+
+library
+  hs-source-dirs: src
+  Include-Dirs:        cpp
+                     , /usr/local/include/openzwave
+                     , /usr/local/include/openzwave/value_classes
+  extra-lib-dirs:      /usr/local/lib64
+  extra-libraries:     openzwave
+                     , stdc++	       
+  C-Sources:           cpp/gen_ozw.cpp
+                     , cpp/std.cpp
+  cc-options:          -fPIC
+  exposed-modules:
+      OpenZWave.Internal.EmptyCpp
+  build-depends:
+      base
+    , haskell-openzwave-gen
+    , hoppy-runtime
+  default-language: Haskell2010
+  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind -pgmlg++

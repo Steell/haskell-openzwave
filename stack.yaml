@@ -1,7 +1,11 @@
 flags: {}
 extra-package-dbs: []
 packages:
-- .
+- haskell-openzwave
+- haskell-openzwave-cpp
+- haskell-openzwave-gen
 extra-deps:
-- fficxx-0.3.1
-resolver: lts-9.13
+- hoppy-generator-0.3.3
+- hoppy-runtime-0.3.1
+- hoppy-std-0.3.0
+resolver: lts-9.14
