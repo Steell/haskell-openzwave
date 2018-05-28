@@ -9,3 +9,7 @@ extra-deps:
 - hoppy-runtime-0.3.1
 - hoppy-std-0.3.0
 resolver: lts-9.14
+nix:
+  enable: true
+  pure: true
+  shell-file: shell.nix

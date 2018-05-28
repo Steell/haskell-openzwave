@@ -1,18 +1,18 @@
 .PHONY: all
 
-CC = g++
+CC = $(g++)
 CFLAGS = -O2
 
 all: cpp/libhozw.so
 
 cpp/libhozw.so: cpp/*.o
-	$(CC) $(CFLAGS) -lopenzwave -dynamic -shared -fPIC -o $@ $^ #-Wl,-rpath=$(libdir)
+	$(CC) $(CFLAGS) -lopenzwave -dynamic -shared -fPIC -o $@ $^
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -I /usr/local/include/openzwave -I /usr/local/include/openzwave/value_classes -fPIC -c -o $@ $<
+	$(CC) $(CFLAGS) -I $(openzwave)/include/openzwave -I $(openzwave)/include/openzwave/value_classes -fPIC -c -o $@ $<
 
 clean:
 	rm -f cpp/*.o cpp/*.so
 
 install:
-	install -t "$(libdir)" cpp/libhozw.so 
+	$(install) -t "$(libdir)" cpp/libhozw.so 

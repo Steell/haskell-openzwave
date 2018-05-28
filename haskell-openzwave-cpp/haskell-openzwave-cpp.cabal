@@ -20,9 +20,9 @@ custom-setup
 library
   hs-source-dirs: src
   Include-Dirs:        cpp
-                     , /usr/local/include/openzwave
-                     , /usr/local/include/openzwave/value_classes
-  extra-lib-dirs:      /usr/local/lib64
+                     -- , /usr/local/include/openzwave
+                     -- , /usr/local/include/openzwave/value_classes
+  -- extra-lib-dirs:      /usr/local/lib64
   extra-libraries:     openzwave
                      , stdc++	       
   C-Sources:           cpp/gen_ozw.cpp
