@@ -1,10 +1,13 @@
 .PHONY: all
 
-CC = $(g++)
+CC = g++
 CFLAGS = -O2
 
 all: cpp/libhozw.so
 
+# TODO(steell): While we do want to dynamically link to openzwave, we probably don't
+#		want to build a dynamic library. We want the haskell code to link
+#		this statically (but maintain the dynamic link to openzwave).
 cpp/libhozw.so: cpp/*.o
 	$(CC) $(CFLAGS) -lopenzwave -dynamic -shared -fPIC -o $@ $^
 
@@ -15,4 +18,5 @@ clean:
 	rm -f cpp/*.o cpp/*.so
 
 install:
-	$(install) -t "$(libdir)" cpp/libhozw.so 
+	echo "Copying library to:$(libdir)"
+	install -t "$(libdir)" cpp/libhozw.so 
