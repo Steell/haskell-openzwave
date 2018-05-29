@@ -7,8 +7,16 @@
 }:
 
 let
+  # TODO(steell): Should we override hoppy-runtime at the top-level?
+  hoppy-runtime = pkgs.haskellPackages.callPackage (
+    pkgs.fetchFromGitLab {
+      owner = "masahirosakai";
+      repo = "hoppy";
+      rev = "a57b3558909643345e44fb5248251d0670e7bf7f";
+      sha256 = "0bygjjj57nlp9hn39c7m58fr06sq0xaalqjlmywp21mdd32kcwqn";
+    } + /runtime) {};
   pkg = pkgs.haskellPackages.callCabal2nix "haskell-openzwave-cpp" ./. {
-    inherit haskell-openzwave-gen; # openzwave;
+    inherit hoppy-runtime haskell-openzwave-gen; # openzwave;
   };
   # Necessary for binding to openzwave
   overridden = pkgs.haskell.lib.overrideCabal pkg (old: {
