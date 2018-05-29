@@ -8,8 +8,9 @@
 
 let
   pkg = pkgs.haskellPackages.callCabal2nix "haskell-openzwave-cpp" ./. {
-    inherit haskell-openzwave-gen openzwave;
+    inherit haskell-openzwave-gen; # openzwave;
   };
+  # Necessary for binding to openzwave
   overridden = pkgs.haskell.lib.overrideCabal pkg (old: {
     configureFlags = [
       "--extra-lib-dirs=${openzwave}/lib64"
@@ -18,5 +19,6 @@ let
     ];
   });
 in overridden.overrideAttrs (oldAttrs: {
+  # This makes $(openzwave) available in Makefile
   inherit openzwave;
 })
