@@ -8,23 +8,13 @@ copyright: Copyright 2017 Stephen Elliott
 build-type: Custom
 cabal-version: >=1.10
 
-extra-source-files:
-  Makefile
-
-custom-setup
-  setup-depends:   base
-                 , Cabal
-                 , haskell-openzwave-gen
-                 , hoppy-runtime
+-- custom-setup
+--   setup-depends:   base
+--                  , haskell-openzwave-gen
+--                  , hoppy-runtime
 
 library
   hs-source-dirs:      src
-  Include-Dirs:        cpp
-  extra-libraries:     openzwave
-                     , stdc++	       
-  C-Sources:           cpp/gen_ozw.cpp
-                     , cpp/std.cpp
-  cc-options:          -fPIC
   exposed-modules:
       OpenZWave.Internal.EmptyCpp
   build-depends:
@@ -32,4 +22,15 @@ library
     , haskell-openzwave-gen
     , hoppy-runtime
   default-language: Haskell2010
-  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind -pgmlg++
+  ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
+  -- -pgmlg++
+  c-sources:           cpp/gen_ozw.cpp
+                     -- , cpp/gen_ozw.hpp
+                     , cpp/std.cpp
+                     -- , cpp/std.hpp
+  include-dirs:        cpp
+  if os(darwin)
+    extra-libraries:   c++
+  else
+    extra-libraries:   stdc++
+  -- cc-options:          -fPIC
