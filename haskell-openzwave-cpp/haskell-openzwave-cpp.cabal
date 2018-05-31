@@ -23,14 +23,16 @@ library
     , hoppy-runtime
   default-language: Haskell2010
   ghc-options: -W -fwarn-incomplete-patterns -fwarn-unused-do-bind
-  -- -pgmlg++
-  c-sources:           cpp/gen_ozw.cpp
-                     -- , cpp/gen_ozw.hpp
-                     , cpp/std.cpp
-                     -- , cpp/std.hpp
-  include-dirs:        cpp
+    -- -pgmlg++
+  --c-sources:           cpp/gen_ozw.cpp
+  --                   , cpp/gen_ozw.hpp
+  --                   , cpp/std.cpp
+  --                   , cpp/std.hpp
+  -- include-dirs:        cpp
   if os(darwin)
     extra-libraries:   c++
+                     , openzwave
   else
     extra-libraries:   stdc++
+                     , openzwave
   -- cc-options:          -fPIC

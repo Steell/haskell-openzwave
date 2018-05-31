@@ -690,14 +690,14 @@ main = defaultMain interfaceResult
 
 interfaceResult :: Either String Interface
 interfaceResult = do
-  iface <- interface "example"
-           [ mod_example
+  iface <- interface "openzwave"
+           [ mod_openzwave
            , mod_std
            ]
   interfaceAddHaskellModuleBase ["OpenZWave"] iface
 
-mod_example :: Module
-mod_example = moduleModify' (makeModule "ozw" "gen_ozw.hpp" "gen_ozw.cpp") $
+mod_openzwave :: Module
+mod_openzwave = moduleModify' (makeModule "ozw" "gen_ozw.hpp" "gen_ozw.cpp") $
     moduleAddExports [ ExportClass c_ValueID
                      , ExportClass c_Notification
                      , ExportClass c_Options

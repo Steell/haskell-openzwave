@@ -21,3 +21,4 @@ cabal.project.local
 .DS_STORE
 haskell-openzwave-cpp/cpp/*
 haskell-openzwave/src/*
+*/result
