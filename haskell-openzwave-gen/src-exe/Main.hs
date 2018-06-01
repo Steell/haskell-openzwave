@@ -18,7 +18,7 @@ e_NotificationType = addReqIncludes [ includeStd "Notification.h" ] $
                   , [ "value", "changed" ]
                   , [ "value", "refreshed" ]
                   , [ "group" ]
-                  , [ "new", "node" ]
+                  , [ "node", "new" ]
                   , [ "node", "added" ]
                   , [ "node", "removed" ]
                   , [ "node", "protocol", "info" ]
@@ -43,6 +43,8 @@ e_NotificationType = addReqIncludes [ includeStd "Notification.h" ] $
                   , [ "driver", "removed" ]
                   , [ "controller", "command" ]
                   , [ "node", "reset" ]
+                  , [ "user", "alerts" ]
+                  , [ "manufacturer", "specific", "db", "ready" ]
                   ])
 
 e_ValueGenre :: CppEnum
