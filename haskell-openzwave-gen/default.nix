@@ -1,5 +1,3 @@
-{ pkgs
-    ? import <nixpkgs> {}
-}:
+{ callCabal2nix }:
 
-pkgs.haskellPackages.callCabal2nix "haskell-openzwave-gen" ./. {}
+callCabal2nix "haskell-openzwave-gen" ./. {}

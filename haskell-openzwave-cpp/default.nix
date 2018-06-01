@@ -1,17 +1,11 @@
-{ pkgs
-    ? import <nixpkgs> {},
-  haskell-openzwave-gen
-    ? import ../haskell-openzwave-gen { inherit pkgs; },
-  openzwave
-    ? pkgs.openzwave
-}:
+{ callCabal2nix, overrideCabal, haskell-openzwave-gen, openzwave }:
 
 let
-  pkg = pkgs.haskellPackages.callCabal2nix "haskell-openzwave-cpp" ./. {
-    inherit haskell-openzwave-gen; # openzwave;
+  pkg = callCabal2nix "haskell-openzwave-cpp" ./. {
+    inherit haskell-openzwave-gen;
   };
   # Necessary for binding to openzwave
-  overridden = pkgs.haskell.lib.overrideCabal pkg (old: {
+  overridden = overrideCabal pkg (old: {
     configureFlags = [
       "--extra-lib-dirs=${openzwave}/lib64"
       "--extra-include-dirs=${openzwave}/include/openzwave"
