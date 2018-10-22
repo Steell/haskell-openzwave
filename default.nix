@@ -4,19 +4,17 @@ in
 {
   openzwave ? pkgs.openzwave,
   callCabal2nix ? pkgs.haskellPackages.callCabal2nix,
-  haskell ? pkgs.haskell
+  callPackage ? pkgs.haskellPackages.callPackage,
+  overrideCabal ? pkgs.haskell.lib.overrideCabal
 }:
 
-with haskell.lib;
 let
-  haskell-openzwave = import ./haskell-openzwave {
-    inherit callCabal2nix haskell-openzwave-gen haskell-openzwave-cpp;
+  haskell-openzwave = callPackage ./haskell-openzwave {
+    inherit haskell-openzwave-gen haskell-openzwave-cpp;
   };
-  haskell-openzwave-cpp = import ./haskell-openzwave-cpp {
-    inherit callCabal2nix overrideCabal haskell-openzwave-gen openzwave;
+  haskell-openzwave-cpp = callPackage ./haskell-openzwave-cpp {
+    inherit overrideCabal haskell-openzwave-gen openzwave;
   };
-  haskell-openzwave-gen = import ./haskell-openzwave-gen {
-    inherit callCabal2nix;
-  };
+  haskell-openzwave-gen = callPackage ./haskell-openzwave-gen { };
 in
   haskell-openzwave
