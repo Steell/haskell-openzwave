@@ -6,7 +6,7 @@ author: Stephen Elliott <steve@steellworks.com>
 maintainer: Stephen Elliott <steve@steellworks.com>
 copyright: Copyright 2017 Stephen Elliott
 build-type: Custom
-cabal-version: >=1.10
+cabal-version: >=2.0
 
 extra-source-files:
   Makefile
@@ -21,7 +21,7 @@ library
   hs-source-dirs:      src
   Include-Dirs:        cpp
   extra-libraries:     openzwave
-                     , stdc++	       
+                     , stdc++
   C-Sources:           cpp/gen_ozw.cpp
                      , cpp/std.cpp
   cc-options:          -fPIC

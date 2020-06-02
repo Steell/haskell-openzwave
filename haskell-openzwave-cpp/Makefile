@@ -9,6 +9,7 @@ all: cpp/libhozw.so
 #		want to build a dynamic library. We want the haskell code to link
 #		this statically (but maintain the dynamic link to openzwave).
 cpp/libhozw.so: cpp/*.o
+	echo "Compiling $(@)"
 	$(CC) $(CFLAGS) -lopenzwave -dynamic -shared -fPIC -o $@ $^
 
 %.o: %.cpp
@@ -19,4 +20,4 @@ clean:
 
 install:
 	echo "Copying library to:$(libdir)"
-	install -t "$(libdir)" cpp/libhozw.so 
+	install -t "$(libdir)" cpp/libhozw.so

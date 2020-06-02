@@ -9,7 +9,9 @@ import Foreign.Hoppy.Generator.Std.String
 import qualified Foreign.Hoppy.Generator.Std.Vector as Vector
 
 e_NotificationType :: CppEnum
-e_NotificationType = addReqIncludes [ includeStd "Notification.h" ] $
+e_NotificationType =
+  enumSetNumericType (Just intT) .
+  addReqIncludes [ includeStd "Notification.h" ] $
     makeEnum (ident2 "OpenZWave" "Notification" "NotificationType")
              Nothing
              (zip [0 ..]
@@ -48,7 +50,9 @@ e_NotificationType = addReqIncludes [ includeStd "Notification.h" ] $
                   ])
 
 e_ValueGenre :: CppEnum
-e_ValueGenre = addReqIncludes [ includeStd "ValueID.h" ] $
+e_ValueGenre =
+  enumSetNumericType (Just intT) .
+  addReqIncludes [ includeStd "ValueID.h" ] $
     makeEnum (ident2 "OpenZWave" "ValueID" "ValueGenre")
              Nothing
              (zip [0 ..]
@@ -60,7 +64,9 @@ e_ValueGenre = addReqIncludes [ includeStd "ValueID.h" ] $
                   ])
 
 e_ValueType :: CppEnum
-e_ValueType = addReqIncludes [ includeStd "ValueID.h" ] $
+e_ValueType =
+  enumSetNumericType (Just intT) .
+  addReqIncludes [ includeStd "ValueID.h" ] $
     makeEnum (ident2 "OpenZWave" "ValueID" "ValueType") Nothing base
   where
     base = zip [0 ..]
@@ -108,7 +114,7 @@ c_ValueID = addReqIncludes [ includeStd "ValueID.h" ] $
                   , m "GetId" ullongT
                   ]
   where
-    m s = mkConstMethod s []
+    m s = mkConstMethod s np
 
 c_Notification :: Class
 c_Notification = addReqIncludes [ includeStd "Notification.h" ] $
@@ -129,7 +135,7 @@ c_Notification = addReqIncludes [ includeStd "Notification.h" ] $
               , m "GetAsString" stringT
               ]
   where
-    m s = mkConstMethod s []
+    m s = mkConstMethod s np
     wm s = m s ucharT
 
 cb_OnNotification :: Callback
@@ -153,9 +159,9 @@ c_Options = addReqIncludes [ includeStd "Options.h" ] $
                                , stringT
                                ]
                                (ptrT (objT c_Options))
-              , mkStaticMethod "Destroy" [] boolT
-              , mkStaticMethod "Get" [] (ptrT (objT c_Options))
-              , mkMethod "Lock" [] boolT
+              , mkStaticMethod "Destroy" np boolT
+              , mkStaticMethod "Get" np (ptrT (objT c_Options))
+              , mkMethod "Lock" np boolT
               , mkMethod "AddOptionBool"
                          [ stringT, constT boolT ]
                          boolT
@@ -180,11 +186,13 @@ c_Options = addReqIncludes [ includeStd "Options.h" ] $
               , mkMethod "GetOptionType"
                          [ stringT ]
                          (enumT e_OptionType)
-              , mkConstMethod "AreLocked" [] boolT
+              , mkConstMethod "AreLocked" np boolT
               ]
 
 e_OptionType :: CppEnum
-e_OptionType = addReqIncludes [ includeStd "Options.h" ] $
+e_OptionType =
+  enumSetNumericType (Just intT) .
+  addReqIncludes [ includeStd "Options.h" ] $
     makeEnum (ident2 "OpenZWave" "Options" "OptionType") Nothing
         $ zip [0 ..] [ [ "Invalid" ], [ "Bool" ], [ "Int" ], [ "String" ] ]
 
@@ -199,16 +207,16 @@ c_Manager =
     (ident1 "OpenZWave" "Manager")
     Nothing
     []
-    [ mkStaticMethod "Create" [] (ptrT (objT c_Manager))
-    , mkStaticMethod "Get" [] (ptrT (objT c_Manager))
-    , mkStaticMethod "Destroy" [] voidT
-    , mkStaticMethod "getVersionAsString" [] stringT
-    , mkStaticMethod "getVersionLongAsString" [] stringT
+    [ mkStaticMethod "Create" np (ptrT (objT c_Manager))
+    , mkStaticMethod "Get" np (ptrT (objT c_Manager))
+    , mkStaticMethod "Destroy" np voidT
+    , mkStaticMethod "getVersionAsString" np stringT
+    , mkStaticMethod "getVersionLongAsString" np stringT
     -- TODO: Need to figure out how to do c structs
     --, static ozwversion getVersion ()
     -- Configuration
     , mkMethod "WriteConfig" [constT homeIdT] voidT
-    , mkConstMethod "GetOptions" [] (ptrT (objT c_Options))
+    , mkConstMethod "GetOptions" np (ptrT (objT c_Options))
     -- Drivers
     , mkMethod
         "AddDriver"
@@ -230,7 +238,7 @@ c_Manager =
     --, mkMethod "GetControllerInterfaceType" [constT homeIdT] (enumT e_DriverControllerInterface)
     , mkMethod "GetControllerPath" [constT homeIdT] stringT
     -- Polling Z-Wave Devices
-    , mkMethod "GetPollInterval" [] intT
+    , mkMethod "GetPollInterval" np intT
     , mkMethod "SetPollInterval" [intT, boolT] voidT
     , mkMethod' "EnablePoll" "enablePoll" [constRefValueID] boolT
     , mkMethod' "EnablePoll" "enablePoll_" [constRefValueID, ucharT] boolT
@@ -514,10 +522,10 @@ c_Manager =
         [constT homeIdT, constT nodeIdT, constT ucharT]
         boolT
     -- Scene Commands
-    , mkMethod "GetNumScenes" [] ucharT
+    , mkMethod "GetNumScenes" np ucharT
     , mkMethod "GetAllScenes" [ptrT (ptrT ucharT)] ucharT
     , mkMethod "RemoveAllScenes" [constT homeIdT] voidT
-    , mkMethod "CreateScene" [] ucharT
+    , mkMethod "CreateScene" np ucharT
     , mkMethod "RemoveScene" [constT ucharT] boolT
     , mkMethod'
         "AddSceneValue"
@@ -692,7 +700,7 @@ main = defaultMain interfaceResult
 
 interfaceResult :: Either String Interface
 interfaceResult = do
-  iface <- interface "example"
+  iface <- interfaceSetNoCompiler <$> interface "example"
            [ mod_example
            , mod_std
            ]
@@ -700,23 +708,23 @@ interfaceResult = do
 
 mod_example :: Module
 mod_example = moduleModify' (makeModule "ozw" "gen_ozw.hpp" "gen_ozw.cpp") $
-    moduleAddExports [ ExportClass c_ValueID
-                     , ExportClass c_Notification
-                     , ExportClass c_Options
-                     , ExportEnum e_NotificationType
-                     , ExportEnum e_ValueGenre
-                     , ExportEnum e_ValueType
-                     , ExportCallback cb_OnNotification
-                     , ExportClass c_stringVector
-                     , ExportClass c_stringIterator
-                     , ExportClass c_stringConstIterator
-                     , ExportClass c_intVector
-                     , ExportClass c_intIterator
-                     , ExportClass c_intConstIterator
-                     , ExportClass c_ValueIDVector
-                     , ExportClass c_ValueIdIterator
-                     , ExportClass c_ValueIdConstIterator
-                     , ExportEnum e_OptionType
-                     , ExportClass c_Manager
+    moduleAddExports [ Export c_ValueID
+                     , Export c_Notification
+                     , Export c_Options
+                     , Export e_NotificationType
+                     , Export e_ValueGenre
+                     , Export e_ValueType
+                     , Export cb_OnNotification
+                     , Export c_stringVector
+                     , Export c_stringIterator
+                     , Export c_stringConstIterator
+                     , Export c_intVector
+                     , Export c_intIterator
+                     , Export c_intConstIterator
+                     , Export c_ValueIDVector
+                     , Export c_ValueIdIterator
+                     , Export c_ValueIdConstIterator
+                     , Export e_OptionType
+                     , Export c_Manager
                      --, ExportFn f_AddWatcher
                      ]

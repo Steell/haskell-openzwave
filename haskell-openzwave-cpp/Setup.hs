@@ -9,4 +9,5 @@ main =
   , cppPackageName = "haskell-openzwave-cpp"
   , cppSourcesDir = "cpp"
   , hsSourcesDir = "src"
+  , interfaceName = Nothing
   }
